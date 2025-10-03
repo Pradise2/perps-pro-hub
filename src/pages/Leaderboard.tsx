@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
 import { Trophy, Medal, Award } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -86,6 +87,8 @@ const Leaderboard = () => {
           </table>
         </Card>
       </main>
+
+      <Footer />
     </div>
   );
 };
