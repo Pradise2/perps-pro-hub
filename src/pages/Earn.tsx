@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Droplet, Lock } from "lucide-react";
@@ -107,6 +108,8 @@ const Earn = () => {
           </Card>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 };

@@ -1,15 +1,16 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
-import { Trophy, Medal, Award } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Trophy, Medal, Award, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const topTraders = [
-  { rank: 1, address: "0x1a2b...c3d4", pnl: 125680, volume: "5.2M", winRate: 68.5 },
-  { rank: 2, address: "0x5e6f...7g8h", pnl: 98234, volume: "4.1M", winRate: 64.2 },
-  { rank: 3, address: "0x9i0j...1k2l", pnl: 87456, volume: "3.8M", winRate: 61.7 },
-  { rank: 4, address: "0x3m4n...5o6p", pnl: 76543, volume: "3.2M", winRate: 59.4 },
-  { rank: 5, address: "0x7q8r...9s0t", pnl: 65432, volume: "2.9M", winRate: 57.8 },
+  { rank: 1, address: "0x1a2b...c3d4", pnl: 125680, volume: "5.2M", winRate: 68.5, followers: 1250, avgRisk: "Medium" },
+  { rank: 2, address: "0x5e6f...7g8h", pnl: 98234, volume: "4.1M", winRate: 64.2, followers: 890, avgRisk: "Low" },
+  { rank: 3, address: "0x9i0j...1k2l", pnl: 87456, volume: "3.8M", winRate: 61.7, followers: 650, avgRisk: "High" },
+  { rank: 4, address: "0x3m4n...5o6p", pnl: 76543, volume: "3.2M", winRate: 59.4, followers: 420, avgRisk: "Medium" },
+  { rank: 5, address: "0x7q8r...9s0t", pnl: 65432, volume: "2.9M", winRate: 57.8, followers: 380, avgRisk: "Low" },
 ];
 
 const Leaderboard = () => {
@@ -49,6 +50,9 @@ const Leaderboard = () => {
                 <th className="text-right p-4 font-medium">Total PnL</th>
                 <th className="text-right p-4 font-medium">Volume</th>
                 <th className="text-right p-4 font-medium">Win Rate</th>
+                <th className="text-right p-4 font-medium">Followers</th>
+                <th className="text-center p-4 font-medium">Avg. Risk</th>
+                <th className="text-center p-4 font-medium">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -80,6 +84,28 @@ const Leaderboard = () => {
                     <span className="font-mono font-semibold text-primary">
                       {trader.winRate}%
                     </span>
+                  </td>
+                  <td className="p-4 text-right">
+                    <span className="flex items-center justify-end gap-1 text-sm text-muted-foreground">
+                      <Users className="h-3 w-3" />
+                      {trader.followers}
+                    </span>
+                  </td>
+                  <td className="p-4 text-center">
+                    <span className={cn(
+                      "px-2 py-1 rounded text-xs font-semibold",
+                      trader.avgRisk === "Low" && "bg-success/10 text-success",
+                      trader.avgRisk === "Medium" && "bg-primary/10 text-primary",
+                      trader.avgRisk === "High" && "bg-destructive/10 text-destructive"
+                    )}>
+                      {trader.avgRisk}
+                    </span>
+                  </td>
+                  <td className="p-4 text-center">
+                    <Button size="sm" className="gap-1">
+                      <Users className="h-3 w-3" />
+                      Copy
+                    </Button>
                   </td>
                 </tr>
               ))}

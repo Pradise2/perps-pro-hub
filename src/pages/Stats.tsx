@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
 import { BarChart3, TrendingUp, Users, DollarSign } from "lucide-react";
 
@@ -87,6 +88,8 @@ const Stats = () => {
           </Card>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 };

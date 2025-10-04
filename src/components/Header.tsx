@@ -1,17 +1,31 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Wallet } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { TrendingUp, Wallet, ChevronDown, User, Trophy, Zap } from "lucide-react";
 
 const Header = () => {
   const location = useLocation();
   
   const isActive = (path: string) => location.pathname === path;
   
+  const tradeLinks = [
+    { path: "/", label: "Futures" },
+    { path: "/spot", label: "Spot" },
+    { path: "/options", label: "Options" },
+  ];
+  
   const navLinks = [
-    { path: "/", label: "Trade" },
     { path: "/earn", label: "Earn" },
-    { path: "/stats", label: "Stats" },
+    { path: "/portfolio", label: "Portfolio" },
     { path: "/leaderboard", label: "Leaderboard" },
+    { path: "/ai-hub", label: "AI Hub" },
+    { path: "/stats", label: "Stats" },
+    { path: "/governance", label: "Governance" },
   ];
 
   return (
@@ -29,6 +43,27 @@ const Header = () => {
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant={isActive("/") || isActive("/spot") || isActive("/options") ? "default" : "ghost"}
+                  size="sm"
+                  className="transition-smooth gap-1"
+                >
+                  Trade <ChevronDown className="h-3 w-3" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="bg-card border-border z-50">
+                {tradeLinks.map((link) => (
+                  <DropdownMenuItem key={link.path} asChild>
+                    <Link to={link.path} className="cursor-pointer">
+                      {link.label}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
             {navLinks.map((link) => (
               <Link key={link.path} to={link.path}>
                 <Button
@@ -59,6 +94,33 @@ const Header = () => {
             <Wallet className="h-4 w-4" />
             <span className="hidden sm:inline">Connect Wallet</span>
           </Button>
+          
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="gap-1">
+                <User className="h-4 w-4" />
+                <span className="hidden sm:inline">0x7a3...</span>
+                <ChevronDown className="h-3 w-3" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="bg-card border-border z-50">
+              <DropdownMenuItem asChild>
+                <Link to="/rewards" className="cursor-pointer flex items-center gap-2">
+                  <Trophy className="h-4 w-4" />
+                  My Rewards & Loyalty
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/portfolio" className="cursor-pointer flex items-center gap-2">
+                  <Wallet className="h-4 w-4" />
+                  Wallet Info
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>

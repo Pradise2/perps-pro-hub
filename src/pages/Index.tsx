@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import MarketsSidebar from "@/components/trading/MarketsSidebar";
 import TradingChart from "@/components/trading/TradingChart";
 import OrderPanel from "@/components/trading/OrderPanel";
@@ -33,6 +34,8 @@ const Index = () => {
           </div>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 };
