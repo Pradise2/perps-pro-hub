@@ -7,6 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { TrendingUp, Wallet, ChevronDown, User, Trophy, Zap } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const Header = () => {
   const location = useLocation();
@@ -89,6 +90,8 @@ const Header = () => {
               <span className="text-foreground font-semibold">$450M</span>
             </div>
           </div>
+
+          <ThemeToggle />
           
           <Button className="gap-2 transition-smooth hover:scale-105">
             <Wallet className="h-4 w-4" />
