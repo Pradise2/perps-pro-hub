@@ -34,10 +34,14 @@ const Footer = () => {
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-sm text-muted-foreground hover:text-primary transition-smooth flex items-center gap-2 group"
+                    className="text-sm text-muted-foreground hover:text-primary transition-smooth flex items-center gap-1.5 group"
                   >
-                    <link.icon className="h-5 w-5 text-primary group-hover:text-primary" />
-                    {link.label}
+                    <span className="flex items-center gap-1.5">
+                      {link.label}
+                      <span className="inline-flex items-center">
+                        <link.icon className="h-4 w-4 text-primary" />
+                      </span>
+                    </span>
                   </Link>
                 </li>
               ))}
