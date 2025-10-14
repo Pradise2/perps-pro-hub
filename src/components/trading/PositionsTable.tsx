@@ -2,58 +2,26 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { X, Edit, Share2, TrendingUp, TrendingDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface Position {
-  id: string;
-  market: string;
-  side: "long" | "short";
-  size: string;
-  leverage: number;
-  entryPrice: string;
-  currentPrice: string;
-  pnl: number;
-  pnlPercent: number;
-  liquidationPrice: string;
-}
-
-const mockPositions: Position[] = [
-  {
-    id: "1",
-    market: "BTC-PERP",
-    side: "long",
-    size: "50,000",
-    leverage: 10,
-    entryPrice: "42,850.00",
-    currentPrice: "43,250.50",
-    pnl: 467.44,
-    pnlPercent: 9.35,
-    liquidationPrice: "41,200.00",
-  },
-  {
-    id: "2",
-    market: "ETH-PERP",
-    side: "short",
-    size: "20,000",
-    leverage: 5,
-    entryPrice: "2,310.50",
-    currentPrice: "2,287.30",
-    pnl: 201.30,
-    pnlPercent: 5.03,
-    liquidationPrice: "2,450.00",
-  },
-];
+import { useTradingContext } from "@/contexts/TradingContext";
 
 const PositionsTable = () => {
+  const { state, actions } = useTradingContext();
+
+  const handleClosePosition = (positionId: string) => {
+    // In a real app, this would call an API to close the position
+    actions.removePosition(positionId);
+  };
+
   return (
     <div className="w-full h-full glass-panel flex flex-col">
       <Tabs defaultValue="positions" className="flex-1 flex flex-col">
         <div className="px-4 border-b border-border">
           <TabsList className="bg-transparent h-auto p-0">
             <TabsTrigger value="positions" className="data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none">
-              Positions
+              Positions ({state.positions.length})
             </TabsTrigger>
             <TabsTrigger value="orders" className="data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none">
-              Open Orders
+              Open Orders ({state.orders.length})
             </TabsTrigger>
             <TabsTrigger value="history" className="data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none">
               Trade History
@@ -78,7 +46,7 @@ const PositionsTable = () => {
                 </tr>
               </thead>
               <tbody>
-                {mockPositions.map((position) => (
+                {state.positions.map((position) => (
                   <tr
                     key={position.id}
                     className="border-b border-border/50 hover:bg-muted/20 transition-smooth"
@@ -141,6 +109,7 @@ const PositionsTable = () => {
                           size="sm"
                           variant="ghost"
                           className="h-8 w-8 p-0 hover:bg-short/20 hover:text-short"
+                          onClick={() => handleClosePosition(position.id)}
                         >
                           <X className="h-4 w-4" />
                         </Button>
@@ -150,18 +119,29 @@ const PositionsTable = () => {
                 ))}
               </tbody>
             </table>
+            
+            {state.positions.length === 0 && (
+              <div className="flex flex-col items-center justify-center h-40 text-muted-foreground">
+                <p>No open positions</p>
+                <p className="text-xs mt-1">Start trading to see your positions here</p>
+              </div>
+            )}
           </div>
         </TabsContent>
 
         <TabsContent value="orders" className="flex-1 m-0 p-8">
           <div className="text-center text-muted-foreground">
-            <p>No open orders</p>
+            <p>No open orders ({state.orders.length})</p>
+            {state.orders.length === 0 && (
+              <p className="text-xs mt-1">Your pending orders will appear here</p>
+            )}
           </div>
         </TabsContent>
 
         <TabsContent value="history" className="flex-1 m-0 p-8">
           <div className="text-center text-muted-foreground">
             <p>No trade history</p>
+            <p className="text-xs mt-1">Your completed trades will appear here</p>
           </div>
         </TabsContent>
       </Tabs>
