@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { TradingProvider } from "@/contexts/TradingContext";
+import { PerformanceMonitor } from "@/components/PerformanceMonitor";
 import Index from "./pages/Index";
 import Spot from "./pages/Spot";
 import Options from "./pages/Options";
@@ -16,7 +17,17 @@ import Governance from "./pages/Governance";
 import Rewards from "./pages/Rewards";
 import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60000, // 1 minute
+      gcTime: 300000, // 5 minutes
+      retry: 2,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TradingProvider>
@@ -39,6 +50,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
+        <PerformanceMonitor />
       </TooltipProvider>
     </TradingProvider>
   </QueryClientProvider>
