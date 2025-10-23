@@ -161,6 +161,7 @@ interface TradingContextType {
   state: TradingState;
   dispatch: Dispatch<TradingAction>;
   actions: {
+    updateBalance(arg0: { available: string; total: string; margin: string; }): unknown;
     updateMarket: (symbol: string, data: Partial<Market>) => void;
     selectMarket: (market: Market) => void;
     addPosition: (position: Position) => void;
@@ -194,6 +195,9 @@ export const TradingProvider = ({ children }: TradingProviderProps) => {
 
   // Action creators for cleaner API
   const actions = {
+    updateBalance: (balance: { available: string; total: string; margin: string; }) =>
+      dispatch({ type: "SET_BALANCE", payload: balance }),
+
     updateMarket: (symbol: string, data: Partial<Market>) =>
       dispatch({ type: "UPDATE_MARKET", payload: { symbol, data } }),
     
@@ -325,7 +329,10 @@ export const TradingProvider = ({ children }: TradingProviderProps) => {
 
         webSocketService.subscribe('error', (error) => {
           console.error('WebSocket error:', error);
-          dispatch({ type: "SET_ERROR", payload: { key: "markets", value: error.message } });
+          const errorMessage = typeof error === "object" && error !== null && "message" in error
+            ? (error as { message: string }).message
+            : String(error);
+          dispatch({ type: "SET_ERROR", payload: { key: "markets", value: errorMessage } });
         });
 
       } catch (error) {

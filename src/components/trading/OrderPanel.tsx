@@ -122,12 +122,9 @@ const OrderPanel = () => {
         
         // Update balance (simplified)
         const newAvailable = (availableBalance - collateralNum).toString();
-        actions.dispatch({
-          type: "SET_BALANCE",
-          payload: {
-            ...state.balance,
-            available: newAvailable
-          }
+        actions.updateBalance({
+          ...state.balance,
+          available: newAvailable
         });
       } else {
         setOrderErrors([result.error || "Failed to place order"]);

@@ -2,11 +2,40 @@ import { useEffect, useRef, useState } from "react";
 import { BarChart3, Maximize2, Settings, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LoadingState } from "@/components/LoadingStates";
+import { useCallback } from "react";
 
 // TradingView widget configuration
+interface TradingViewWidgetOptions {
+  width: string | number;
+  height: string | number;
+  symbol: string;
+  interval: string;
+  timezone: string;
+  theme: string;
+  style: string;
+  locale: string;
+  toolbar_bg: string;
+  enable_publishing: boolean;
+  hide_top_toolbar: boolean;
+  hide_legend: boolean;
+  save_image: boolean;
+  container_id: string;
+  studies: string[];
+  loading_screen: {
+    backgroundColor: string;
+    foregroundColor: string;
+  };
+  disabled_features: string[];
+  enabled_features: string[];
+  overrides: Record<string, string>;
+  onChartReady: () => void;
+}
+
 declare global {
   interface Window {
-    TradingView: any;
+    TradingView: {
+      widget: (options: TradingViewWidgetOptions) => Record<string, unknown>;
+    };
   }
 }
 
@@ -16,7 +45,7 @@ interface TradingChartProps {
 
 const TradingChart = ({ marketSymbol }: TradingChartProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const widgetRef = useRef<any>(null);
+  const widgetRef = useRef<Record<string, unknown> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [timeframe, setTimeframe] = useState("15");
@@ -43,19 +72,13 @@ const TradingChart = ({ marketSymbol }: TradingChartProps) => {
     };
   }, []);
 
-  // Initialize widget when script is loaded
-  useEffect(() => {
-    if (scriptLoaded && containerRef.current && window.TradingView) {
-      initializeWidget();
-    }
-  }, [scriptLoaded, marketSymbol, timeframe]);
-
-  const initializeWidget = () => {
+  // Initialize widget function wrapped in useCallback
+  const initializeWidget = useCallback(() => {
     if (!containerRef.current) return;
 
     // Clear existing widget
-    if (widgetRef.current) {
-      widgetRef.current.remove();
+    if (containerRef.current) {
+      containerRef.current.innerHTML = "";
     }
 
     setIsLoading(true);
@@ -73,7 +96,7 @@ const TradingChart = ({ marketSymbol }: TradingChartProps) => {
     const tvSymbol = symbolMap[marketSymbol] || 'BINANCE:BTCUSDT';
 
     try {
-      widgetRef.current = new window.TradingView.widget({
+      widgetRef.current = window.TradingView.widget({
         width: '100%',
         height: '100%',
         symbol: tvSymbol,
@@ -118,12 +141,12 @@ const TradingChart = ({ marketSymbol }: TradingChartProps) => {
         onChartReady: () => {
           setIsLoading(false);
         }
-      });
+      }) as Record<string, unknown>;
     } catch (error) {
       console.error('Failed to initialize TradingView widget:', error);
       setIsLoading(false);
     }
-  };
+  }, [marketSymbol, timeframe]);
 
   const timeframes = [
     { label: '1m', value: '1' },
@@ -212,3 +235,4 @@ const TradingChart = ({ marketSymbol }: TradingChartProps) => {
 };
 
 export default TradingChart;
+

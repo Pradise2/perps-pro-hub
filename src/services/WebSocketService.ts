@@ -2,7 +2,7 @@ import { Market, Position, Order } from "@/types/trading";
 
 export interface WebSocketMessage {
   type: 'market_update' | 'position_update' | 'order_update' | 'error' | 'connection' | 'ping';
-  data?: any;
+  data?: MarketUpdateData | PositionUpdateData | OrderUpdateData | { message?: string; status?: string };
   timestamp: number;
 }
 
@@ -40,7 +40,7 @@ export class WebSocketService {
   private reconnectDelay = 1000; // Start with 1 second
   private pingInterval: NodeJS.Timeout | null = null;
   private isConnecting = false;
-  private subscribers: Map<string, Set<(data: any) => void>> = new Map();
+  private subscribers: Map<string, Set<(data: unknown) => void>> = new Map();
   
   // Market data simulation - In production, this would connect to a real WebSocket feed
   private simulationIntervals: Map<string, NodeJS.Timeout> = new Map();
@@ -88,7 +88,7 @@ export class WebSocketService {
     this.stopSimulation();
   }
 
-  subscribe(eventType: string, callback: (data: any) => void): () => void {
+  subscribe(eventType: string, callback: (data: unknown) => void): () => void {
     if (!this.subscribers.has(eventType)) {
       this.subscribers.set(eventType, new Set());
     }
@@ -183,7 +183,7 @@ export class WebSocketService {
     }, 500);
   }
 
-  private send(message: any): void {
+  private send(message: WebSocketMessage | object): void {
     if (this.ws?.readyState === WebSocket.OPEN) {
       this.ws.send(JSON.stringify(message));
     }
@@ -208,7 +208,15 @@ export class WebSocketService {
     }
   }
 
-  private emit(eventType: string, data: any): void {
+  private emit(
+    eventType: string,
+    data:
+      | MarketUpdateData
+      | PositionUpdateData
+      | OrderUpdateData
+      | { message?: string; status?: string }
+      | undefined
+  ): void {
     const callbacks = this.subscribers.get(eventType);
     if (callbacks) {
       callbacks.forEach(callback => {

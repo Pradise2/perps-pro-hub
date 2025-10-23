@@ -64,7 +64,7 @@ export class TradingService {
     data?: OrderRequest 
   } {
     try {
-      const validatedData = orderRequestSchema.parse(orderRequest);
+      const validatedData = orderRequestSchema.parse(orderRequest) as OrderRequest;
       
       // Additional business logic validation
       const errors: string[] = [];
