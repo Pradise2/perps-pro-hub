@@ -1,6 +1,5 @@
 Professional Trading Platform
  an advanced trading platform designed for professional traders. It features a comprehensive interface for trading perpetual futures, spot, and options, enhanced with AI-powered insights, social copy trading, and DeFi capital efficiency.
-
 ## ✨ Features
 
 TradeX is built with a rich set of features to provide a complete trading experience:
@@ -13,8 +12,6 @@ TradeX is built with a rich set of features to provide a complete trading experi
 *   **🎁 Rewards & Loyalty Program**: Earn XP by completing daily trading quests. Climb loyalty tiers to unlock benefits like trading fee discounts and redeem XP in the rewards store.
 *   **💰 Earn Passive Yield**: Become a liquidity provider by depositing assets into liquidity pools (e.g., USDC, ETH, BTC) and earn a share of the platform's revenue.
 *   **📊 Platform Statistics**: View real-time platform metrics, including 24-hour trading volume, Total Value Locked (TVL), open interest, and the number of active traders.
-
-
 
 ## 📂 Project Structure
 
