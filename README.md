@@ -39,29 +39,6 @@ You need to have Node.js and npm (or yarn/pnpm) installed on your machine.
 
 *   [Install Node.js with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
-### Installation
-
-1.  **Clone the repository:**
-    ```sh
-    git clone <YOUR_GIT_URL>
-    ```
-
-2.  **Navigate to the project directory:**
-    ```sh
-    cd akin-tunde-nexus-tradeverse
-    ```
-
-3.  **Install the necessary dependencies:**
-    ```sh
-    npm install
-    ```
-
-4.  **Start the development server:**
-    This command will start the Vite development server with auto-reloading and an instant preview.
-    ```sh
-    npm run dev
-    ```
-    Your application will be available at `http://localhost:8080`.
 
 ## 📜 Available Scripts
 
